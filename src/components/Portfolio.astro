@@ -1,0 +1,68 @@
+---
+import { portfolioItems } from '../data/portfolio';
+
+const categoryIcons: Record<string, string> = {
+  article: '📝',
+  video: '🎬',
+  newsletter: '📨',
+  commentary: '💬',
+};
+
+const categoryStyles: Record<string, string> = {
+  article: 'bg-accent-lavender/15 text-accent-lavender',
+  video: 'bg-purple-400/15 text-purple-500',
+  newsletter: 'bg-accent-rose/15 text-accent-rose',
+  commentary: 'bg-blue-400/15 text-blue-500',
+};
+---
+
+<section id="work" class="portfolio-section section-padding bg-bg-secondary relative">
+  <div class="max-w-6xl mx-auto">
+    <div class="pixel-divider w-24 mb-6"></div>
+    <h2 class="section-title font-display font-bold text-3xl md:text-4xl lg:text-5xl mb-16 tracking-tight">
+      Selected Work<span class="gradient-text">.</span>
+    </h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      {portfolioItems.map((item) => (
+        <a
+          href={item.url || '#'}
+          target="_blank"
+          rel="noopener noreferrer"
+          class={`portfolio-card glass-card p-6 hover:translate-y-[-8px] transition-all duration-400 group relative overflow-hidden block ${item.featured ? 'md:col-span-2 lg:col-span-2' : ''}`}
+          data-cursor-hover
+        >
+          <!-- Hover glow -->
+          <div class="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-accent-lavender/0 to-transparent group-hover:via-accent-lavender/40 transition-all duration-500"></div>
+
+          <!-- Category badge -->
+          <div class="flex items-center justify-between mb-4">
+            <span class={`pixel-badge px-2.5 py-1.5 ${categoryStyles[item.category]}`}>
+              {item.category}
+            </span>
+            {item.metric && (
+              <span class="font-pixel text-[9px] text-accent-rose">{item.metric}</span>
+            )}
+          </div>
+
+          <!-- Title -->
+          <h3 class="font-display font-medium text-lg md:text-xl text-text-primary mb-2 group-hover:text-accent-lavender transition-colors duration-300">
+            {item.title}
+          </h3>
+
+          <!-- Source -->
+          <p class="text-accent-lavender/60 text-xs font-medium mb-3 uppercase tracking-wider">{item.source}</p>
+
+          <!-- Description -->
+          <p class="text-text-secondary text-sm leading-relaxed">{item.description}</p>
+
+          <!-- Arrow icon -->
+          <div class="mt-5 flex items-center gap-2 text-text-muted group-hover:text-accent-lavender transition-all duration-300">
+            <span class="font-pixel text-[7px]">Read more</span>
+            <span class="font-pixel text-[8px] group-hover:translate-x-1 transition-transform duration-300">&rarr;</span>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

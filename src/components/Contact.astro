@@ -1,0 +1,137 @@
+---
+import { socialLinks } from '../data/social';
+---
+
+<section id="contact" class="section-padding relative">
+  <!-- Background gradient -->
+  <div class="absolute inset-0 bg-bg-secondary pointer-events-none" aria-hidden="true"></div>
+
+  <div class="relative z-10 max-w-4xl mx-auto text-center">
+    <!-- Heading -->
+    <div class="relative inline-block">
+      <span class="heading-sparkle hs-1">✦</span>
+      <span class="heading-sparkle hs-2">✦</span>
+      <span class="heading-sparkle hs-3">✦</span>
+      <span class="heading-sparkle hs-4">✦</span>
+      <span class="heading-sparkle hs-5">✦</span>
+      <span class="heading-sparkle hs-6">✦</span>
+      <span class="heading-sparkle hs-7">✦</span>
+      <span class="heading-sparkle hs-8">✦</span>
+      <span class="heading-sparkle hs-9">✦</span>
+      <span class="heading-sparkle hs-10">✦</span>
+      <span class="heading-sparkle hs-11">✦</span>
+      <span class="heading-sparkle hs-12">✦</span>
+      <h2 class="contact-heading font-bold tracking-tight mb-6" style="font-family:'Caveat',cursive; font-size: clamp(2.5rem, 6vw, 4.5rem);">
+        <span class="gradient-text">Let's Buidl Something</span>
+        <br />
+        <span class="text-text-primary">Together!!</span>
+      </h2>
+    </div>
+
+    <p class="text-text-secondary text-base md:text-lg mb-10 max-w-2xl mx-auto">
+      Open to roles in Web3 research, content strategy, community management, and growth marketing.
+      Let's connect.
+    </p>
+
+    <!-- Email CTA with character and sparkles -->
+    <div class="relative inline-block mb-12">
+      <img src="/assets/icom.png" alt="" class="contact-char absolute left-1/2 -translate-x-1/2 w-16 h-16 object-contain" style="bottom: calc(100% - 12px); image-rendering: pixelated;" aria-hidden="true" />
+      <span class="mail-sparkle sp-1">✦</span>
+      <span class="mail-sparkle sp-2">✦</span>
+      <span class="mail-sparkle sp-3">✦</span>
+      <span class="mail-sparkle sp-4">✦</span>
+      <a
+        href="mailto:berilbektas3@gmail.com"
+        class="mail-btn inline-flex items-center gap-3 px-10 py-4 rounded-[4px] font-medium transition-all duration-300 hover:scale-[1.03]"
+        style="background: linear-gradient(135deg, rgba(216,160,172,0.12) 0%, rgba(196,136,153,0.18) 100%); color: #B07080; border: 1px solid rgba(196,136,153,0.18); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); box-shadow: 0 2px 16px rgba(196,136,153,0.06), inset 0 1px 0 rgba(255,255,255,0.3);"
+        data-cursor-hover
+      >
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+        </svg>
+        berilbektas3@gmail.com
+      </a>
+    </div>
+
+    <!-- Social Links -->
+    <div class="flex items-center justify-center gap-5 mb-16">
+      {socialLinks.map((link) => (
+        <a
+          href={link.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="social-btn w-14 h-14 rounded-[4px] flex items-center justify-center text-text-secondary/70 border border-[rgba(196,136,153,0.14)] transition-all duration-300"
+          style="background: linear-gradient(135deg, rgba(216,160,172,0.06) 0%, rgba(196,136,153,0.10) 100%); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); box-shadow: 0 2px 12px rgba(196,136,153,0.04), inset 0 1px 0 rgba(255,255,255,0.25);"
+          aria-label={link.name}
+          data-cursor-hover
+        >
+          <Fragment set:html={link.icon} />
+        </a>
+      ))}
+    </div>
+
+    <!-- Pixel Divider -->
+    <div class="pixel-divider w-24 mx-auto mb-8"></div>
+
+    <!-- Footer -->
+    <footer class="text-text-muted font-pixel text-[6px] tracking-wide">
+      <p class="flex items-center justify-center gap-2 mb-2">
+        <span class="text-accent-rose/50">&#9670;</span>
+        <span>Istanbul, Turkey</span>
+      </p>
+      <p>&copy; {new Date().getFullYear()} Beril Bektas</p>
+    </footer>
+  </div>
+</section>
+
+<style>
+  .heading-sparkle {
+    position: absolute;
+    color: #2C2C2C;
+    pointer-events: none;
+    animation: mailSparkle 3s ease-in-out infinite;
+  }
+  .hs-1 { top: -14px; left: 12%; font-size: 12px; animation-delay: 0s; }
+  .hs-2 { top: -8px; right: 5%; font-size: 14px; animation-delay: 0.4s; }
+  .hs-3 { top: 38%; left: -22px; font-size: 10px; animation-delay: 0.8s; }
+  .hs-4 { top: 30%; right: -20px; font-size: 11px; animation-delay: 1.2s; }
+  .hs-5 { bottom: 4px; left: 22%; font-size: 9px; animation-delay: 1.6s; }
+  .hs-6 { bottom: -10px; right: 18%; font-size: 13px; animation-delay: 2s; }
+  .hs-7 { top: -6px; left: 38%; font-size: 10px; animation-delay: 2.4s; }
+  .hs-8 { top: 18%; left: -12px; font-size: 13px; animation-delay: 0.2s; }
+  .hs-9 { top: 55%; right: -16px; font-size: 9px; animation-delay: 0.6s; }
+  .hs-10 { bottom: -6px; left: 6%; font-size: 11px; animation-delay: 1s; }
+  .hs-11 { top: -18px; right: 22%; font-size: 9px; animation-delay: 1.4s; }
+  .hs-12 { bottom: 8px; right: -12px; font-size: 12px; animation-delay: 1.8s; }
+
+  .mail-btn:hover {
+    background: linear-gradient(135deg, rgba(216,160,172,0.22) 0%, rgba(196,136,153,0.28) 100%) !important;
+    border-color: rgba(196,136,153,0.35) !important;
+    box-shadow: 0 4px 24px rgba(196,136,153,0.14), inset 0 1px 0 rgba(255,255,255,0.35) !important;
+    color: #9A5A6A !important;
+  }
+
+  .social-btn:hover {
+    background: linear-gradient(135deg, rgba(216,160,172,0.16) 0%, rgba(196,136,153,0.22) 100%) !important;
+    border-color: rgba(196,136,153,0.3) !important;
+    box-shadow: 0 4px 20px rgba(196,136,153,0.1), inset 0 1px 0 rgba(255,255,255,0.3) !important;
+    color: #B07080;
+    transform: translateY(-3px);
+  }
+
+  .mail-sparkle {
+    position: absolute;
+    color: #D8A0AC;
+    font-size: 10px;
+    pointer-events: none;
+    animation: mailSparkle 2.5s ease-in-out infinite;
+  }
+  .mail-sparkle.sp-1 { top: -8px; right: -18px; animation-delay: 0s; }
+  .mail-sparkle.sp-2 { top: 50%; left: -20px; font-size: 8px; animation-delay: 0.6s; }
+  .mail-sparkle.sp-3 { bottom: -6px; right: -14px; font-size: 8px; animation-delay: 1.2s; }
+  .mail-sparkle.sp-4 { top: -4px; left: -16px; font-size: 7px; animation-delay: 1.8s; }
+  @keyframes mailSparkle {
+    0%, 100% { opacity: 0; transform: scale(0.5) rotate(0deg); }
+    50% { opacity: 0.7; transform: scale(1) rotate(180deg); }
+  }
+</style>

@@ -1,0 +1,163 @@
+---
+interface PubItem {
+  title: string;
+  source: string;
+  description: string;
+  type: string;
+  accentColor: string;
+  url: string;
+}
+
+const publications: PubItem[] = [
+  {
+    title: 'Can Quantum Kill Crypto?',
+    source: 'Paragraph',
+    description: 'Explores the potential impact of quantum computing on blockchain security, analyzing how algorithms like Shor\'s could threaten current cryptographic systems such as ECDSA.',
+    type: 'Article',
+    accentColor: 'bg-accent-lavender',
+    url: 'https://paragraph.com/@0x5ed6f668e541108399fefdaef7da4e9e32902b46/can-quantum-kill-crypto?referrer=0x5ed6f668e541108399fEfDaef7da4e9E32902B46',
+  },
+  {
+    title: 'Another Post, Another Lottery',
+    source: 'X / Twitter',
+    description: 'An analysis of how AI-driven content production and algorithmic distribution have reshaped social media, turning visibility into a probabilistic system.',
+    type: 'Thread',
+    accentColor: 'bg-blue-400',
+    url: 'https://x.com/0xberil_/status/2016205513063604358',
+  },
+  {
+    title: 'Congrats, Your AI Agent Just Hired a Scammer',
+    source: 'X / Twitter',
+    description: 'Explores how ERC-8004 aims to solve the trust problem between autonomous AI agents by providing decentralized infrastructure for identity, reputation, and verifiable work.',
+    type: 'Thread',
+    accentColor: 'bg-blue-400',
+    url: 'https://x.com/0xberil_/status/2011854049935860080',
+  },
+  {
+    title: 'What Are Circle STARKs?',
+    source: 'Medium',
+    description: 'Explains how Circle STARKs improve STARK proof efficiency by operating over smaller fields such as Mersenne primes, reducing computational costs while maintaining security.',
+    type: 'Article',
+    accentColor: 'bg-accent-lavender',
+    url: 'https://medium.com/@berilbektas3/circle-starks-nedir-667ecd4156f5',
+  },
+  {
+    title: 'What Is Maximal Extractable Value (MEV)?',
+    source: 'ITU Blockchain',
+    description: 'Explains how MEV emerges from transaction ordering in blockchain systems, shaping Ethereum through arbitrage, liquidations, front-running, and sandwich attacks.',
+    type: 'Article',
+    accentColor: 'bg-accent-rose',
+    url: 'https://blog.itublockchain.com/maksimum-%C3%A7%C4%B1kar%C4%B1labilir-de%C4%9Fer-mev-nedir-de0ff751dfb3',
+  },
+  {
+    title: 'What Is EIP-4844?',
+    source: 'ITU Blockchain',
+    description: 'Explains proto-danksharding as Ethereum\'s first major step toward cheaper rollup transactions by introducing blob data as a more efficient alternative to calldata.',
+    type: 'Article',
+    accentColor: 'bg-accent-rose',
+    url: 'https://blog.itublockchain.com/eip-4844-nedir-5a346fa68c74',
+  },
+];
+
+const types = ['All', 'Article', 'Thread'];
+---
+
+<section id="writing" class="publications-section section-padding bg-bg-secondary relative">
+  <div class="max-w-5xl mx-auto">
+    <div class="pixel-divider w-24 mb-6"></div>
+    <h2 class="section-title font-display font-bold text-3xl md:text-4xl lg:text-5xl mb-6 tracking-tight">
+      Writing & Publications<span class="gradient-text">.</span>
+    </h2>
+
+    <p class="text-text-secondary text-base md:text-lg mb-12">
+      Research, analysis, and educational content across platforms.
+    </p>
+
+    <!-- Filter tabs -->
+    <div class="flex items-center gap-2 mb-10 overflow-x-auto pb-2 scrollbar-hide" id="pubFilters">
+      {types.map((type, i) => (
+        <button
+          class={`pub-filter whitespace-nowrap px-4 py-2 rounded-[2px] font-pixel text-[7px] transition-all duration-300 ${
+            i === 0
+              ? 'bg-accent-lavender/20 text-accent-lavender'
+              : 'bg-text-primary/[0.03] text-text-muted hover:text-text-secondary hover:bg-text-primary/[0.06]'
+          }`}
+          data-filter={type.toLowerCase()}
+          data-cursor-hover
+        >
+          {type}
+        </button>
+      ))}
+    </div>
+
+    <!-- Publication list -->
+    <div class="space-y-0" id="pubList">
+      {publications.map((pub) => (
+        <a
+          href={pub.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="pub-row group flex items-start gap-4 py-5 border-b border-text-primary/[0.05] hover:pl-3 transition-all duration-300"
+          data-type={pub.type.toLowerCase()}
+          data-cursor-hover
+        >
+          <!-- Accent bar -->
+          <div class={`w-[3px] h-8 rounded ${pub.accentColor} opacity-40 group-hover:opacity-100 group-hover:h-full transition-all duration-300 flex-shrink-0 mt-1`}></div>
+
+          <!-- Content -->
+          <div class="flex-1 min-w-0">
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <h3 class="font-display font-medium text-base md:text-lg text-text-primary group-hover:text-accent-lavender transition-colors duration-300">
+                  {pub.title}
+                </h3>
+                <p class="text-text-secondary text-sm mt-1">{pub.description}</p>
+              </div>
+
+              <!-- Arrow -->
+              <svg class="w-4 h-4 text-text-muted group-hover:text-accent-lavender group-hover:rotate-[-45deg] transition-all duration-300 flex-shrink-0 mt-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
+              </svg>
+            </div>
+
+            <div class="flex items-center gap-3 mt-2">
+              <span class="text-text-muted font-pixel text-[6px]">{pub.source}</span>
+              <span class="text-text-muted font-pixel text-[6px]">·</span>
+              <span class="text-text-muted font-pixel text-[6px]">{pub.type}</span>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  // Publication filter
+  const filters = document.querySelectorAll('.pub-filter');
+  const rows = document.querySelectorAll('.pub-row');
+
+  filters.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const filter = btn.getAttribute('data-filter');
+
+      // Update active state
+      filters.forEach((f) => {
+        f.classList.remove('bg-accent-lavender/20', 'text-accent-lavender');
+        f.classList.add('bg-text-primary/[0.03]', 'text-text-muted');
+      });
+      btn.classList.add('bg-accent-lavender/20', 'text-accent-lavender');
+      btn.classList.remove('bg-text-primary/[0.03]', 'text-text-muted');
+
+      // Filter rows
+      rows.forEach((row) => {
+        const type = row.getAttribute('data-type');
+        if (filter === 'all' || type === filter) {
+          (row as HTMLElement).style.display = 'flex';
+        } else {
+          (row as HTMLElement).style.display = 'none';
+        }
+      });
+    });
+  });
+</script>

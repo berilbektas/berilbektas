@@ -1,0 +1,407 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+import '../styles/global.css';
+
+const {
+  title = 'Beril Bektas — Web3 Research, Content & Community',
+  description = 'Web3 content specialist with 3+ years of experience in growth marketing, research, and community management across blockchain projects.',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="author" content="Beril Bektas" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://berilbektas.com" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@0xberil_" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+
+    <title>{title}</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Preload fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Caveat font for hero heading -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&display=swap" />
+
+    <!-- GSAP (loaded in head so it's ready before body scripts) -->
+    <script is:inline src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
+    <script is:inline src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
+    <script is:inline src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
+  </head>
+  <body class="bg-bg-secondary text-text-primary font-body">
+    <!-- Grain overlay -->
+    <div class="grain-overlay" aria-hidden="true"></div>
+
+    <!-- Scroll progress bar -->
+    <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+    <!-- Custom cursor (desktop only) -->
+    <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+    <div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
+
+    <slot />
+
+    <!-- Initialize all animations -->
+    <script is:inline>
+      gsap.registerPlugin(ScrollTrigger);
+
+      // ==========================================
+      // SMOOTH SCROLL (desktop only)
+      // ==========================================
+      // Lenis smooth scroll - disabled in preview, enable for production
+      var isMobile = window.matchMedia('(max-width: 768px)').matches;
+      var isPlaywright = navigator.userAgent.indexOf('HeadlessChrome') > -1;
+
+      if (!isMobile && !isPlaywright && window.Lenis) {
+        var lenis = new Lenis({
+          duration: 1.2,
+          easing: function(t) { return Math.min(1, 1.001 - Math.pow(2, -10 * t)); },
+          orientation: 'vertical',
+          smoothWheel: true,
+        });
+
+        lenis.on('scroll', ScrollTrigger.update);
+
+        gsap.ticker.add(function(time) {
+          lenis.raf(time * 1000);
+        });
+
+        gsap.ticker.lagSmoothing(0);
+      }
+
+      // ==========================================
+      // SCROLL PROGRESS BAR
+      // ==========================================
+      var progressBar = document.getElementById('scrollProgress');
+      if (progressBar) {
+        gsap.to(progressBar, {
+          scaleX: 1,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: document.body,
+            start: 'top top',
+            end: 'bottom bottom',
+            scrub: 0.3,
+          },
+        });
+      }
+
+      // ==========================================
+      // CUSTOM CURSOR (desktop only)
+      // ==========================================
+      var isTouch = window.matchMedia('(hover: none)').matches;
+      var dot = document.getElementById('cursorDot');
+      var ring = document.getElementById('cursorRing');
+
+      if (!isTouch && dot && ring) {
+        var moveDotX = gsap.quickTo(dot, 'left', { duration: 0.05, ease: 'power3' });
+        var moveDotY = gsap.quickTo(dot, 'top', { duration: 0.05, ease: 'power3' });
+        var moveRingX = gsap.quickTo(ring, 'left', { duration: 0.3, ease: 'power3' });
+        var moveRingY = gsap.quickTo(ring, 'top', { duration: 0.3, ease: 'power3' });
+
+        document.addEventListener('mousemove', function(e) {
+          moveDotX(e.clientX);
+          moveDotY(e.clientY);
+          moveRingX(e.clientX);
+          moveRingY(e.clientY);
+        });
+
+        var hoverTargets = document.querySelectorAll('a, button, [data-cursor-hover]');
+        hoverTargets.forEach(function(el) {
+          el.addEventListener('mouseenter', function() { ring.classList.add('hovering'); dot.classList.add('hovering'); });
+          el.addEventListener('mouseleave', function() { ring.classList.remove('hovering'); dot.classList.remove('hovering'); });
+        });
+
+        document.body.style.cursor = 'none';
+        document.querySelectorAll('a, button').forEach(function(el) {
+          el.style.cursor = 'none';
+        });
+      } else {
+        if (dot) dot.remove();
+        if (ring) ring.remove();
+      }
+
+      // ==========================================
+      // NAVIGATION SCROLL EFFECT
+      // ==========================================
+      var nav = document.getElementById('mainNav');
+      if (nav) {
+        ScrollTrigger.create({
+          start: 'top -80',
+          onUpdate: function(self) {
+            if (self.scroll() > 100) {
+              nav.classList.add('nav-scrolled');
+            } else {
+              nav.classList.remove('nav-scrolled');
+            }
+          },
+        });
+      }
+
+      // Hero animations are now CSS-only (see global.css .hero-animate)
+
+      // ==========================================
+      // HELPER: Reliable scroll-triggered animation
+      // Uses ScrollTrigger.create + onEnter to avoid
+      // gsap.from() + scrollTrigger timing issues with Lenis
+      // ==========================================
+      function animateOnScroll(trigger, targets, fromVars, toVars, start) {
+        if (!targets || (targets.length !== undefined && targets.length === 0)) return;
+        ScrollTrigger.create({
+          trigger: trigger,
+          start: start || 'top 85%',
+          once: true,
+          onEnter: function() {
+            gsap.fromTo(targets, fromVars, toVars);
+          }
+        });
+      }
+
+      // ==========================================
+      // ABOUT SECTION ANIMATIONS
+      // ==========================================
+      var aboutBio = document.querySelector('.about-bio');
+      var statCards = document.querySelectorAll('.stat-card');
+
+      if (aboutBio) {
+        animateOnScroll(aboutBio, aboutBio,
+          { x: -60, opacity: 0 },
+          { x: 0, opacity: 1, duration: 1, ease: 'power3.out' },
+          'top 80%'
+        );
+      }
+
+      if (statCards.length) {
+        animateOnScroll(statCards[0], statCards,
+          { x: 60, opacity: 0 },
+          { x: 0, opacity: 1, duration: 0.8, stagger: 0.15, ease: 'power3.out' },
+          'top 80%'
+        );
+      }
+
+      // Counter animations
+      document.querySelectorAll('[data-count]').forEach(function(el) {
+        var target = parseFloat(el.getAttribute('data-count') || '0');
+        var suffix = el.getAttribute('data-suffix') || '';
+        var obj = { val: 0 };
+
+        ScrollTrigger.create({
+          trigger: el,
+          start: 'top 85%',
+          once: true,
+          onEnter: function() {
+            gsap.to(obj, {
+              val: target,
+              duration: 2,
+              ease: 'power2.out',
+              onUpdate: function() {
+                if (target >= 1000000) {
+                  el.textContent = (obj.val / 1000000).toFixed(1) + 'M' + suffix;
+                } else if (target >= 1000) {
+                  el.textContent = Math.floor(obj.val).toLocaleString('en-US') + suffix;
+                } else {
+                  el.textContent = Math.floor(obj.val) + suffix;
+                }
+              },
+            });
+          }
+        });
+      });
+
+      // ==========================================
+      // TIMELINE ANIMATIONS
+      // ==========================================
+      var timelineLineFill = document.querySelector('.timeline-line-fill');
+      if (timelineLineFill) {
+        gsap.to(timelineLineFill, {
+          scaleY: 1,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: '.timeline-section',
+            start: 'top 60%',
+            end: 'bottom 80%',
+            scrub: 1,
+          },
+        });
+      }
+
+      document.querySelectorAll('.timeline-card').forEach(function(card, i) {
+        var direction = i % 2 === 0 ? -60 : 60;
+        animateOnScroll(card, card,
+          { x: window.innerWidth < 1024 ? 0 : direction, y: window.innerWidth < 1024 ? 40 : 0, opacity: 0 },
+          { x: 0, y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' }
+        );
+      });
+
+      document.querySelectorAll('.timeline-node').forEach(function(node) {
+        animateOnScroll(node, node,
+          { scale: 0 },
+          { scale: 1, duration: 0.5, ease: 'back.out(2)' }
+        );
+      });
+
+      // ==========================================
+      // PORTFOLIO CARDS ANIMATION
+      // ==========================================
+      var portfolioCards = document.querySelectorAll('.portfolio-card');
+      if (portfolioCards.length) {
+        animateOnScroll('.portfolio-section', portfolioCards,
+          { y: 40, opacity: 0, scale: 0.95 },
+          { y: 0, opacity: 1, scale: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out' },
+          'top 80%'
+        );
+      }
+
+      // ==========================================
+      // HACKATHON HORIZONTAL SCROLL (desktop only)
+      // ==========================================
+      var hackSection = document.querySelector('.hackathon-section');
+      var hackTrack = document.querySelector('.hackathon-track');
+
+      if (hackSection && hackTrack && window.innerWidth >= 1024) {
+        var getScrollAmount = function() {
+          return hackTrack.scrollWidth - window.innerWidth + 200;
+        };
+
+        gsap.to(hackTrack, {
+          x: function() { return -getScrollAmount(); },
+          ease: 'none',
+          scrollTrigger: {
+            trigger: hackSection,
+            start: 'top top',
+            end: function() { return '+=' + getScrollAmount(); },
+            scrub: 1,
+            pin: true,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+          },
+        });
+      } else if (hackSection) {
+        var hackCards = document.querySelectorAll('.hackathon-card');
+        animateOnScroll(hackSection, hackCards,
+          { y: 30, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.6, stagger: 0.1, ease: 'power3.out' },
+          'top 80%'
+        );
+      }
+
+      // ==========================================
+      // PUBLICATIONS ANIMATION
+      // ==========================================
+      var pubRows = document.querySelectorAll('.pub-row');
+      if (pubRows.length) {
+        animateOnScroll('.publications-section', pubRows,
+          { y: 30, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.6, stagger: 0.08, ease: 'power3.out' },
+          'top 80%'
+        );
+      }
+
+      // ==========================================
+      // CONTACT SECTION ANIMATION
+      // ==========================================
+      var contactHeading = document.querySelector('.contact-heading');
+      var contactSocials = document.querySelectorAll('.contact-social');
+
+      if (contactHeading) {
+        animateOnScroll(contactHeading, contactHeading,
+          { y: 40, opacity: 0 },
+          { y: 0, opacity: 1, duration: 1, ease: 'power3.out' },
+          'top 80%'
+        );
+      }
+
+      if (contactSocials.length) {
+        animateOnScroll(contactSocials[0], contactSocials,
+          { y: 20, opacity: 0, scale: 0.8 },
+          { y: 0, opacity: 1, scale: 1, duration: 0.5, stagger: 0.1, ease: 'back.out(2)' }
+        );
+      }
+
+      // ==========================================
+      // SECTION TITLES ANIMATION
+      // ==========================================
+      document.querySelectorAll('.section-title').forEach(function(title) {
+        animateOnScroll(title, title,
+          { y: 30, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' }
+        );
+      });
+
+      // ==========================================
+      // PARALLAX EFFECTS
+      // ==========================================
+      if (window.innerWidth >= 768) {
+        document.querySelectorAll('[data-parallax]').forEach(function(el) {
+          var speed = parseFloat(el.getAttribute('data-parallax') || '0.2');
+          gsap.to(el, {
+            y: function() { return window.innerHeight * speed * -1; },
+            ease: 'none',
+            scrollTrigger: {
+              trigger: el,
+              start: 'top bottom',
+              end: 'bottom top',
+              scrub: 1,
+            },
+          });
+        });
+      }
+
+      // ==========================================
+      // NAV ACTIVE SECTION HIGHLIGHT
+      // ==========================================
+      document.querySelectorAll('section[id]').forEach(function(section) {
+        ScrollTrigger.create({
+          trigger: section,
+          start: 'top 40%',
+          end: 'bottom 40%',
+          onEnter: function() { highlightNav(section.id); },
+          onEnterBack: function() { highlightNav(section.id); },
+        });
+      });
+
+      function highlightNav(id) {
+        document.querySelectorAll('.nav-link').forEach(function(link) {
+          link.classList.remove('text-accent-lavender');
+          link.classList.add('text-text-secondary');
+        });
+        var active = document.querySelector('.nav-link[href="#' + id + '"]');
+        if (active) {
+          active.classList.add('text-accent-lavender');
+          active.classList.remove('text-text-secondary');
+        }
+      }
+
+      // ==========================================
+      // REFRESH ScrollTrigger after full page load
+      // Ensures positions are correct after fonts/images load
+      // Double refresh for Lenis + pin compatibility
+      // ==========================================
+      window.addEventListener('load', function() {
+        ScrollTrigger.refresh();
+        setTimeout(function() {
+          ScrollTrigger.refresh();
+        }, 500);
+      });
+    </script>
+  </body>
+</html>

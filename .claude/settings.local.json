@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(sudo chown -R 501:20 \"/Users/berilbektas/.npm\")",
+      "Bash(npm config set cache /Users/berilbektas/.npm-cache-new)",
+      "Bash(npm create astro@latest /Users/berilbektas/Desktop/website -- --template minimal --no-install --no-git --typescript strict)",
+      "Bash(npm install)",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(npm run build)"
+    ]
+  }
+}

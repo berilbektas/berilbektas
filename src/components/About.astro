@@ -1,0 +1,246 @@
+---
+const stats = [
+  { value: 5000000, suffix: '+', label: 'Total Engagements', display: '5M+' },
+  { value: 7000000, suffix: '+', label: 'Annual Impressions', display: '7M+' },
+  { value: 3000, suffix: '+', label: 'Newsletter Subscribers', display: '3,000+' },
+  { value: 7, suffix: '+', label: 'Hackathons', display: '7+' },
+];
+---
+
+<section id="about" class="section-padding bg-bg-secondary relative">
+  <div class="max-w-6xl mx-auto">
+    <!-- Pixel divider top -->
+    <div class="pixel-divider w-24 mb-6"></div>
+    <h2 class="section-title font-display font-bold text-3xl md:text-4xl lg:text-5xl mb-16 tracking-tight">
+      About<span class="gradient-text">.</span>
+    </h2>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+      <!-- Bio -->
+      <div class="about-bio">
+        <!-- Profile Photo -->
+        <div class="mb-8 flex items-center gap-5">
+          <div class="relative group">
+            <div class="absolute -inset-1 bg-gradient-to-br from-accent-lavender/30 to-accent-rose/30 rounded-xl blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <img
+              src="/images/profile.jpg"
+              alt="Beril Bektas"
+              class="relative w-20 h-20 md:w-24 md:h-24 rounded-xl object-cover ring-2 ring-text-primary/[0.06] group-hover:ring-accent-lavender/30 transition-all duration-500"
+              style="image-rendering: pixelated;"
+              loading="lazy"
+            />
+          </div>
+          <div>
+            <h3 class="font-display font-semibold text-lg md:text-xl text-text-primary">Beril Bektas</h3>
+            <p class="text-accent-lavender text-sm md:text-base">Web3 Research, Content & Community</p>
+          </div>
+        </div>
+
+        <p class="text-text-secondary text-base md:text-lg leading-relaxed mb-6">
+          I'm a Web3 content specialist based in Istanbul with 3+ years of experience across
+          growth marketing, research, and community management in the blockchain ecosystem.
+        </p>
+        <p class="text-text-secondary text-base md:text-lg leading-relaxed mb-6">
+          I focus on translating complex ecosystem topics into content that people can actually
+          follow and engage with — from technical research and weekly newsletters to community
+          building and event coverage.
+        </p>
+        <p class="text-text-secondary text-base md:text-lg leading-relaxed">
+          Currently studying at Istanbul Technical University while
+          co-running <span class="text-accent-lavender">Maslak Labs</span>, a Web3 community
+          & content hub, and advising <a href="https://x.com/ITUblockchain" target="_blank" rel="noopener noreferrer" class="text-accent-lavender hover:underline underline-offset-4 transition-colors">ITU Blockchain</a>,
+          Turkey's first and biggest university blockchain community.
+        </p>
+      </div>
+
+      <!-- Stats Grid -->
+      <div class="mt-[38px]">
+        <div class="grid grid-cols-2 gap-5">
+        {stats.map((stat) => (
+          <div class="stat-card glass-card pixel-corner p-8 md:p-10 text-center group hover:translate-y-[-4px] transition-all duration-300">
+              <div
+                class="font-pixel text-xl md:text-2xl lg:text-3xl text-accent-lavender mb-4"
+                data-count={stat.value}
+                data-suffix={stat.suffix}
+              >
+                {stat.display}
+              </div>
+              <div class="font-pixel text-[7px] md:text-[8px] text-text-muted tracking-wide uppercase">
+                {stat.label}
+              </div>
+          </div>
+        ))}
+        </div>
+      </div>
+    </div>
+
+    <!-- Walking character platform - full width below content -->
+    <div class="hidden md:block mt-2">
+      <canvas id="aboutWalkCanvas" style="width:100%;height:auto;image-rendering:pixelated;image-rendering:crisp-edges;display:block;"></canvas>
+    </div>
+  </div>
+</section>
+
+<script is:inline>
+(function(){
+  var c = document.getElementById('aboutWalkCanvas');
+  if(!c) return;
+
+  var W=400, H=40;
+  var ctx;
+
+  function setup(){
+    var dpr=window.devicePixelRatio||1;
+    var parent=c.parentElement;
+    var pw=parent.clientWidth;
+    c.width=W*dpr; c.height=H*dpr;
+    c.style.width=pw+'px';
+    c.style.height=Math.round(pw*H/W)+'px';
+    ctx=c.getContext('2d');
+    ctx.scale(dpr,dpr);
+    ctx.imageSmoothingEnabled=false;
+  }
+
+  // Character sprite
+  var imgChar=new Image(), charOC=null;
+  imgChar.src='/assets/icom.png';
+  imgChar.onload=function(){
+    var iw=imgChar.naturalWidth, ih=imgChar.naturalHeight;
+    charOC=document.createElement('canvas');
+    charOC.width=iw; charOC.height=ih;
+    var oc=charOC.getContext('2d');
+    oc.drawImage(imgChar,0,0);
+    var id=oc.getImageData(0,0,iw,ih), d=id.data;
+    for(var i=0;i<d.length;i+=4){
+      if(d[i]>250&&d[i+1]>250&&d[i+2]>250) d[i+3]=0;
+    }
+    oc.putImageData(id,0,0);
+    var minY=ih,maxY=0;
+    for(var yi=0;yi<ih;yi++) for(var xi=0;xi<iw;xi++){
+      if(d[(yi*iw+xi)*4+3]>0){if(yi<minY)minY=yi;if(yi>maxY)maxY=yi;}
+    }
+    var trimH=maxY-minY+1;
+    var tc=document.createElement('canvas');
+    tc.width=iw; tc.height=trimH;
+    tc.getContext('2d').drawImage(charOC,0,minY,iw,trimH,0,0,iw,trimH);
+    charOC=tc;
+  };
+
+  // ETH token sprite
+  var imgEth=new Image(), ethLoaded=false;
+  imgEth.src='/assets/eth-pixel.png';
+  imgEth.onload=function(){ ethLoaded=true; };
+
+  // ETH token positions (floating in space)
+  var ethSize=8;
+  var ethDefs=[50,90,130,170,210,250,290,330,370];
+  var tokens=[];
+  function resetTokens(){
+    tokens=ethDefs.map(function(x){return{x:x,y:H/2-4,got:false,at:0};});
+  }
+  resetTokens();
+
+  // Sparkle particles for collection
+  var particles=[];
+
+  // State
+  var cx=20, speed=40, dir=1, fr=0;
+  var charY=H/2+6;
+  var lastT=0, collected=0;
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+
+    // Draw tokens
+    if(ethLoaded){
+      for(var i=0;i<tokens.length;i++){
+        var tk=tokens[i];
+        if(tk.got){
+          // Float up + fade animation
+          if(tk.at<1){
+            var a=1-tk.at;
+            ctx.globalAlpha=a;
+            ctx.drawImage(imgEth,tk.x-ethSize/2,tk.y-tk.at*15,ethSize,ethSize);
+            ctx.globalAlpha=1;
+          }
+        } else {
+          // Bobbing animation
+          var bob=Math.sin(fr*0.8+i*1.2)*1.5;
+          ctx.drawImage(imgEth,tk.x-ethSize/2,tk.y+bob,ethSize,ethSize);
+        }
+      }
+    }
+
+    // Draw particles
+    for(var i=particles.length-1;i>=0;i--){
+      var p=particles[i];
+      ctx.globalAlpha=1-p.t;
+      ctx.fillStyle='#F3D0D7';
+      ctx.fillRect(Math.round(p.x),Math.round(p.y),2,2);
+      ctx.globalAlpha=1;
+    }
+
+    // Draw character
+    if(charOC){
+      var ratio=charOC.width/charOC.height;
+      var ch=24, cw=Math.round(ch*ratio);
+      var dx=Math.round(cx-cw/2), dy=Math.round(charY-ch+3);
+      ctx.save();
+      if(dir<0){
+        ctx.translate(dx+cw,0);
+        ctx.scale(-1,1);
+        ctx.drawImage(charOC,0,dy,cw,ch);
+      } else {
+        ctx.drawImage(charOC,dx,dy,cw,ch);
+      }
+      ctx.restore();
+    }
+  }
+
+  function tick(t){
+    if(!lastT) lastT=t;
+    var dt=Math.min((t-lastT)/1000,0.05);
+    lastT=t;
+
+    cx+=speed*dir*dt;
+    fr+=dt*6;
+
+    // Bounce at edges
+    if(cx>W-20){ dir=-1; cx=W-20; }
+    if(cx<20){ dir=1; cx=20; }
+
+    // Check token collection
+    for(var i=0;i<tokens.length;i++){
+      var tk=tokens[i];
+      if(!tk.got && Math.abs(cx-tk.x)<10){
+        tk.got=true; tk.at=0; collected++;
+        // Spawn sparkle particles
+        for(var j=0;j<4;j++){
+          particles.push({x:tk.x+(Math.random()-0.5)*8,y:tk.y,
+            vx:(Math.random()-0.5)*30,vy:-20-Math.random()*20,t:0});
+        }
+      }
+      if(tk.got && tk.at<1) tk.at+=dt*2;
+    }
+
+    // Update particles
+    for(var i=particles.length-1;i>=0;i--){
+      var p=particles[i];
+      p.x+=p.vx*dt; p.y+=p.vy*dt; p.t+=dt*2;
+      if(p.t>=1) particles.splice(i,1);
+    }
+
+    // Reset tokens when all collected and character reaches edge
+    if(collected>=tokens.length && (cx<=22||cx>=W-22)){
+      collected=0; resetTokens();
+    }
+
+    draw();
+    requestAnimationFrame(tick);
+  }
+
+  setup();
+  window.addEventListener('resize',setup);
+  requestAnimationFrame(tick);
+})();
+</script>

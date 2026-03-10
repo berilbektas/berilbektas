@@ -1,0 +1,301 @@
+---
+import { hackathons } from '../data/hackathons';
+---
+
+<section id="awards" class="hackathon-section relative">
+  <!-- Desktop: Horizontal Scroll -->
+  <div class="section-padding">
+    <div class="max-w-6xl mx-auto mb-12 lg:mb-0">
+      <div class="pixel-divider w-24 mb-6"></div>
+      <h2 class="section-title font-display font-bold text-3xl md:text-4xl lg:text-5xl tracking-tight">
+        Hackathons & Awards<span class="gradient-text">.</span>
+      </h2>
+      <p class="text-text-secondary mt-4 text-base md:text-lg">
+        Building, competing, and winning across the Ethereum ecosystem.
+      </p>
+    </div>
+  </div>
+
+  <!-- Cards Track -->
+  <div class="hackathon-track lg:flex lg:items-center lg:gap-8 lg:px-16 lg:py-8 grid grid-cols-1 sm:grid-cols-2 gap-5 px-6 pb-16 lg:pb-0">
+    <!-- Spacer for desktop -->
+    <div class="hidden lg:block lg:min-w-[200px]"></div>
+
+    {hackathons.map((hack) => {
+      const inner = (
+        <div
+          class={`glass-card p-6 md:p-8 h-full relative overflow-hidden group hover:translate-y-[-4px] transition-all duration-300 ${
+            hack.featured ? 'border-accent-lavender/30 shimmer-border' : ''
+          }`}
+        >
+          {/* Featured badge */}
+          {hack.featured && (
+            <div class="absolute top-4 right-4">
+              <span class="font-pixel text-[7px] bg-gradient-to-r from-accent-lavender to-accent-rose bg-clip-text text-transparent">
+                #1 Global
+              </span>
+            </div>
+          )}
+
+          {/* Trophy icon */}
+          <div class={`w-12 h-12 rounded-[3px] flex items-center justify-center mb-5 ${hack.featured ? 'bg-accent-lavender/20' : 'bg-text-primary/[0.03]'}`}>
+            <svg class={`w-6 h-6 ${hack.featured ? 'text-accent-lavender' : 'text-text-muted'} group-hover:text-accent-lavender transition-colors`} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 013 3h-15a3 3 0 013-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 01-.982-3.172M9.497 14.25a7.454 7.454 0 00.981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 007.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99 2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M18.75 4.236c.982.143 1.954.317 2.916.52A6.003 6.003 0 0016.27 9.728M18.75 4.236V4.5c0 2.108-.966 3.99-2.48 5.228m0 0a6.003 6.003 0 01-3.77 1.522m0 0a6.003 6.003 0 01-3.77-1.522" />
+            </svg>
+          </div>
+
+          {/* Year */}
+          <span class="text-text-muted font-pixel text-[7px] mb-2 block">{hack.year}</span>
+
+          {/* Event name */}
+          <h3 class={`font-display font-medium text-xl mb-2 ${hack.featured ? 'text-text-primary text-2xl' : 'text-text-primary'}`}>
+            {hack.event}
+          </h3>
+
+          {/* Achievement */}
+          {hack.achievement && (
+            <p class={`text-sm font-medium ${hack.featured ? 'text-text-secondary' : 'text-text-secondary'}`}>
+              {hack.achievement}
+            </p>
+          )}
+
+          {/* Link arrow */}
+          {hack.url && (
+            <div class="absolute bottom-4 right-4 text-text-muted/40 group-hover:text-accent-lavender transition-all duration-300">
+              <svg class="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
+              </svg>
+            </div>
+          )}
+        </div>
+      );
+
+      return hack.url ? (
+        <a href={hack.url} target="_blank" rel="noopener noreferrer" class={`hackathon-card lg:min-w-[340px] lg:max-w-[340px] block ${hack.featured ? 'lg:min-w-[400px] lg:max-w-[400px]' : ''}`} data-cursor-hover>
+          {inner}
+        </a>
+      ) : (
+        <div class={`hackathon-card lg:min-w-[340px] lg:max-w-[340px] ${hack.featured ? 'lg:min-w-[400px] lg:max-w-[400px]' : ''}`}>
+          {inner}
+        </div>
+      );
+    })}
+
+    <!-- Spacer for desktop -->
+    <div class="hidden lg:block lg:min-w-[200px]"></div>
+  </div>
+</section>
+
+<style>
+  .shimmer-border {
+    position: relative;
+  }
+  .shimmer-border::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    right: -1px;
+    bottom: -1px;
+    border-radius: 9px;
+    background: linear-gradient(90deg, transparent, rgba(196, 136, 153, 0.3), rgba(212, 160, 128, 0.3), transparent);
+    background-size: 200% 100%;
+    animation: shimmer 3s linear infinite;
+    z-index: -1;
+  }
+
+</style>
+
+<style is:global>
+  .hack-char-fixed {
+    position: fixed;
+    z-index: 9999;
+    pointer-events: none;
+    filter: drop-shadow(0 2px 8px rgba(196,136,153,0.3));
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .hack-char-fixed.visible { opacity: 1; }
+
+  .hack-sparkle {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    color: #D8A0AC;
+    font-size: 12px;
+    animation: hackSparkle 0.7s ease-out forwards;
+  }
+  @keyframes hackSparkle {
+    0% { opacity: 1; transform: scale(0.3) rotate(0deg); }
+    50% { opacity: 0.8; transform: scale(1.2) rotate(90deg); }
+    100% { opacity: 0; transform: scale(0.5) rotate(180deg) translateY(-20px); }
+  }
+
+  .hack-bounce {
+    animation: hackBounceGlobal 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+  @keyframes hackBounceGlobal {
+    0% { transform: scale(0.94) translateY(8px); opacity: 0.8; }
+    60% { transform: scale(1.03) translateY(-3px); opacity: 1; }
+    100% { transform: scale(1) translateY(0); opacity: 1; }
+  }
+</style>
+
+<script>
+  (function() {
+    if (window.innerWidth < 1024) return;
+
+    var section = document.querySelector('.hackathon-section');
+    var cards = document.querySelectorAll('.hackathon-card');
+    if (!section || !cards.length) return;
+
+    // Create fixed character element
+    var charEl = document.createElement('div');
+    charEl.className = 'hack-char-fixed';
+    var charImg = document.createElement('img');
+    charImg.src = '/assets/icom.png';
+    charImg.alt = '';
+    charImg.style.cssText = 'width:40px;height:40px;object-fit:contain;image-rendering:pixelated;';
+    charEl.appendChild(charImg);
+    document.body.appendChild(charEl);
+
+    var lastActiveIdx = -1;
+    var charX = 0, charY = 0;
+    var targetX = 0, targetY = 0;
+    var jumping = false, jumpPhase = 0;
+    var startX = 0, startY = 0;
+    var running = true;
+    var sectionVisible = false;
+
+    var sparkleColors = ['#D8A0AC', '#C48899', '#F0B8C0', '#E8C87A', '#D4A080'];
+
+    function spawnSparkles(vx, vy, count) {
+      for (var i = 0; i < count; i++) {
+        var sp = document.createElement('div');
+        sp.className = 'hack-sparkle';
+        sp.textContent = '✦';
+        sp.style.color = sparkleColors[Math.floor(Math.random() * sparkleColors.length)];
+        sp.style.fontSize = (8 + Math.random() * 8) + 'px';
+        sp.style.left = (vx - 15 + Math.random() * 30) + 'px';
+        sp.style.top = (vy - 10 + Math.random() * 20) + 'px';
+        document.body.appendChild(sp);
+        setTimeout(function() { sp.remove(); }, 750);
+      }
+    }
+
+    function getActiveCardIdx() {
+      var viewCenter = window.innerWidth / 2;
+      var closest = 0;
+      var closestDist = Infinity;
+      cards.forEach(function(card, i) {
+        var rect = card.getBoundingClientRect();
+        var cardCenter = rect.left + rect.width / 2;
+        var dist = Math.abs(cardCenter - viewCenter);
+        if (dist < closestDist) {
+          closestDist = dist;
+          closest = i;
+        }
+      });
+      return closest;
+    }
+
+    function getCardTarget(idx) {
+      var card = cards[idx];
+      if (!card) return { x: 0, y: 0 };
+      var rect = card.getBoundingClientRect();
+      return {
+        x: rect.left + rect.width / 2 - 20,
+        y: rect.top - 48
+      };
+    }
+
+    function jumpTo(idx) {
+      if (jumping || idx === lastActiveIdx) return;
+      var pos = getCardTarget(idx);
+      startX = charX;
+      startY = charY;
+      targetX = pos.x;
+      targetY = pos.y;
+      jumping = true;
+      jumpPhase = 0;
+
+      // Bounce card
+      var card = cards[idx];
+      card.classList.remove('hack-bounce');
+      void card.offsetWidth;
+      card.classList.add('hack-bounce');
+
+      // Sparkles at landing
+      setTimeout(function() {
+        var rect = cards[idx].getBoundingClientRect();
+        spawnSparkles(rect.left + rect.width / 2, rect.top, 6);
+      }, 280);
+
+      lastActiveIdx = idx;
+    }
+
+    function loop() {
+      if (!running) return;
+
+      // Check if section is in viewport (pinned)
+      var sRect = section.getBoundingClientRect();
+      sectionVisible = sRect.top <= 10 && sRect.bottom >= window.innerHeight * 0.5;
+
+      if (sectionVisible) {
+        charEl.classList.add('visible');
+
+        var idx = getActiveCardIdx();
+        if (idx !== lastActiveIdx) {
+          if (lastActiveIdx === -1) {
+            // First time - snap to position
+            var pos = getCardTarget(idx);
+            charX = pos.x;
+            charY = pos.y;
+            targetX = pos.x;
+            targetY = pos.y;
+            lastActiveIdx = idx;
+          } else {
+            jumpTo(idx);
+          }
+        }
+
+        // Update position
+        if (jumping) {
+          jumpPhase += 0.05;
+          if (jumpPhase >= 1) {
+            jumpPhase = 1;
+            jumping = false;
+          }
+          var t = jumpPhase;
+          var ease = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+          charX = startX + (targetX - startX) * ease;
+          charY = startY + (targetY - startY) * ease - Math.sin(t * Math.PI) * 35;
+        } else {
+          // Smoothly track card position (it moves with GSAP scroll)
+          var pos = getCardTarget(lastActiveIdx >= 0 ? lastActiveIdx : 0);
+          targetX = pos.x;
+          targetY = pos.y;
+          charX += (targetX - charX) * 0.15;
+          charY = targetY + Math.sin(Date.now() * 0.003) * 3;
+        }
+
+        charEl.style.left = charX + 'px';
+        charEl.style.top = charY + 'px';
+      } else {
+        charEl.classList.remove('visible');
+        lastActiveIdx = -1;
+      }
+
+      requestAnimationFrame(loop);
+    }
+
+    // Start after GSAP has time to init
+    setTimeout(loop, 600);
+
+    // Cleanup
+    document.addEventListener('astro:before-swap', function() {
+      running = false;
+      charEl.remove();
+    });
+  })();
+</script>
