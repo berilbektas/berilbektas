@@ -1,7 +1,7 @@
 ---
 ---
 
-<div class="hidden md:block hero-animate hero-delay-3" id="platformWrap" aria-hidden="true">
+<div class="block hero-animate hero-delay-3" id="platformWrap" aria-hidden="true">
   <canvas id="platformCanvas"></canvas>
 </div>
 
@@ -11,6 +11,13 @@
     margin-top: -2rem;
     margin-left: -24px;
     margin-right: -24px;
+  }
+  @media (max-width: 767px) {
+    #platformWrap {
+      margin-top: -17rem;
+      margin-left: -24px;
+      margin-right: -24px;
+    }
   }
   #platformCanvas {
     width: 100%;
