@@ -21,7 +21,7 @@ import { socialLinks } from '../data/social';
       <span class="heading-sparkle hs-10">✦</span>
       <span class="heading-sparkle hs-11">✦</span>
       <span class="heading-sparkle hs-12">✦</span>
-      <h2 class="contact-heading font-bold tracking-tight mb-6" style="font-family:'Caveat',cursive; font-size: clamp(2.5rem, 6vw, 4.5rem);">
+      <h2 class="contact-heading font-bold tracking-tight mb-6" style="font-family:'Caveat',cursive; font-size: clamp(1.5rem, 4.5vw, 4.5rem);">
         <span class="gradient-text">Let's Buidl Something</span>
         <br />
         <span class="text-text-primary">Together!!</span>
@@ -103,6 +103,12 @@ import { socialLinks } from '../data/social';
   .hs-10 { bottom: -6px; left: 6%; font-size: 11px; animation-delay: 1s; }
   .hs-11 { top: -18px; right: 22%; font-size: 9px; animation-delay: 1.4s; }
   .hs-12 { bottom: 8px; right: -12px; font-size: 12px; animation-delay: 1.8s; }
+
+  /* Mobile: prevent sparkle overflow from clipping heading text */
+  @media (max-width: 767px) {
+    .contact-heading { font-size: clamp(1.3rem, 6.5vw, 2.2rem) !important; }
+    .heading-sparkle { display: none; }
+  }
 
   .mail-btn:hover {
     background: linear-gradient(135deg, rgba(216,160,172,0.22) 0%, rgba(196,136,153,0.28) 100%) !important;

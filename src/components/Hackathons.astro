@@ -159,13 +159,14 @@ import { hackathons } from '../data/hackathons';
     charEl.appendChild(charImg);
     document.body.appendChild(charEl);
 
-    var lastActiveIdx = -1;
+    var currentIdx = -1;
     var charX = 0, charY = 0;
-    var targetX = 0, targetY = 0;
     var jumping = false, jumpPhase = 0;
-    var startX = 0, startY = 0;
+    var startX = 0, startY = 0, endX = 0, endY = 0;
+    var jumpQueue = -1; // queued next card after current jump finishes
     var running = true;
     var sectionVisible = false;
+    var fadingOut = false;
 
     var sparkleColors = ['#D8A0AC', '#C48899', '#F0B8C0', '#E8C87A', '#D4A080'];
 
@@ -183,7 +184,8 @@ import { hackathons } from '../data/hackathons';
       }
     }
 
-    function getActiveCardIdx() {
+    // Get the card closest to viewport center
+    function getCenterCardIdx() {
       var viewCenter = window.innerWidth / 2;
       var closest = 0;
       var closestDist = Infinity;
@@ -199,7 +201,7 @@ import { hackathons } from '../data/hackathons';
       return closest;
     }
 
-    function getCardTarget(idx) {
+    function getCardCenter(idx) {
       var card = cards[idx];
       if (!card) return { x: 0, y: 0 };
       var rect = card.getBoundingClientRect();
@@ -209,90 +211,126 @@ import { hackathons } from '../data/hackathons';
       };
     }
 
-    function jumpTo(idx) {
-      if (jumping || idx === lastActiveIdx) return;
-      var pos = getCardTarget(idx);
-      startX = charX;
-      startY = charY;
-      targetX = pos.x;
-      targetY = pos.y;
+    // Determine next step: move only +1 or -1 toward the target
+    function getNextIdx(target) {
+      if (target > currentIdx) return currentIdx + 1;
+      if (target < currentIdx) return currentIdx - 1;
+      return currentIdx;
+    }
+
+    function startJump(toIdx) {
+      // Snapshot start from current card's live position (not charX/Y which may be mid-bob)
+      var fromPos = getCardCenter(currentIdx);
+      startX = fromPos.x;
+      startY = fromPos.y;
+      // Snapshot end position
+      var toPos = getCardCenter(toIdx);
+      endX = toPos.x;
+      endY = toPos.y;
       jumping = true;
       jumpPhase = 0;
 
-      // Bounce card
-      var card = cards[idx];
+      // Bounce target card
+      var card = cards[toIdx];
       card.classList.remove('hack-bounce');
       void card.offsetWidth;
       card.classList.add('hack-bounce');
 
       // Sparkles at landing
+      var landIdx = toIdx;
       setTimeout(function() {
-        var rect = cards[idx].getBoundingClientRect();
-        spawnSparkles(rect.left + rect.width / 2, rect.top, 6);
-      }, 280);
+        if (!cards[landIdx]) return;
+        var rect = cards[landIdx].getBoundingClientRect();
+        spawnSparkles(rect.left + rect.width / 2, rect.top, 8);
+      }, 500);
 
-      lastActiveIdx = idx;
+      currentIdx = toIdx;
     }
 
     function loop() {
       if (!running) return;
 
-      // Check if section is in viewport (pinned)
       var sRect = section.getBoundingClientRect();
       sectionVisible = sRect.top <= 10 && sRect.bottom >= window.innerHeight * 0.5;
 
       if (sectionVisible) {
+        if (fadingOut) {
+          charEl.style.transition = 'opacity 0.3s';
+        }
         charEl.classList.add('visible');
 
-        var idx = getActiveCardIdx();
-        if (idx !== lastActiveIdx) {
-          if (lastActiveIdx === -1) {
-            // First time - snap to position
-            var pos = getCardTarget(idx);
-            charX = pos.x;
-            charY = pos.y;
-            targetX = pos.x;
-            targetY = pos.y;
-            lastActiveIdx = idx;
-          } else {
-            jumpTo(idx);
+        var wantIdx = getCenterCardIdx();
+
+        if (currentIdx === -1) {
+          // First appearance — snap instantly
+          currentIdx = wantIdx;
+          var pos = getCardCenter(currentIdx);
+          charX = pos.x;
+          charY = pos.y;
+        } else if (!jumping) {
+          // Not jumping — check if we need to step toward wantIdx
+          if (wantIdx !== currentIdx) {
+            var nextIdx = getNextIdx(wantIdx);
+            startJump(nextIdx);
           }
+        } else {
+          // Currently jumping — queue where we should go next
+          jumpQueue = wantIdx;
         }
 
-        // Update position
+        // Update character position
         if (jumping) {
-          jumpPhase += 0.05;
+          jumpPhase += 0.025;
           if (jumpPhase >= 1) {
             jumpPhase = 1;
             jumping = false;
+            // Land exactly on the card
+            var landPos = getCardCenter(currentIdx);
+            charX = landPos.x;
+            charY = landPos.y;
+            // If there's a queued destination, start next jump immediately
+            if (jumpQueue >= 0 && jumpQueue !== currentIdx) {
+              var next = getNextIdx(jumpQueue);
+              jumpQueue = -1;
+              startJump(next);
+            } else {
+              jumpQueue = -1;
+            }
+          } else {
+            var t = jumpPhase;
+            var ease = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+            // Update end position live (card moves with GSAP scroll)
+            var liveEnd = getCardCenter(currentIdx);
+            charX = startX + (liveEnd.x - startX) * ease;
+            charY = startY + (liveEnd.y - startY) * ease - Math.sin(t * Math.PI) * 40;
           }
-          var t = jumpPhase;
-          var ease = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
-          charX = startX + (targetX - startX) * ease;
-          charY = startY + (targetY - startY) * ease - Math.sin(t * Math.PI) * 35;
         } else {
-          // Smoothly track card position (it moves with GSAP scroll)
-          var pos = getCardTarget(lastActiveIdx >= 0 ? lastActiveIdx : 0);
-          targetX = pos.x;
-          targetY = pos.y;
-          charX += (targetX - charX) * 0.15;
-          charY = targetY + Math.sin(Date.now() * 0.003) * 3;
+          // Idle — stick to card center with gentle bob
+          var pos = getCardCenter(currentIdx);
+          charX = pos.x;
+          charY = pos.y + Math.sin(Date.now() * 0.002) * 2;
         }
 
         charEl.style.left = charX + 'px';
         charEl.style.top = charY + 'px';
+        fadingOut = false;
       } else {
-        charEl.classList.remove('visible');
-        lastActiveIdx = -1;
+        // Fade out gracefully
+        if (!fadingOut) {
+          fadingOut = true;
+          charEl.style.transition = 'opacity 0.5s ease-out';
+          charEl.classList.remove('visible');
+        }
+        currentIdx = -1;
+        jumping = false;
+        jumpQueue = -1;
       }
 
       requestAnimationFrame(loop);
     }
 
-    // Start after GSAP has time to init
     setTimeout(loop, 600);
 
-    // Cleanup
     document.addEventListener('astro:before-swap', function() {
       running = false;
       charEl.remove();
