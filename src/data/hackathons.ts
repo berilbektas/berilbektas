@@ -4,6 +4,7 @@ export interface HackathonItem {
   year: string;
   featured?: boolean;
   url?: string;
+  confetti?: boolean;
 }
 
 export const hackathons: HackathonItem[] = [
@@ -12,11 +13,13 @@ export const hackathons: HackathonItem[] = [
     achievement: '1st Place, Global',
     year: '2024',
     featured: true,
+    confetti: true,
   },
   {
     event: 'ETHDam III',
     achievement: 'Finalist & Best AI Project',
     year: '2025',
+    confetti: true,
     url: 'https://taikai.network/cryptocanal/hackathons/ethdam2025/projects/cmaix7zwt01hli8o9fr4ycpub/idea',
   },
   {
