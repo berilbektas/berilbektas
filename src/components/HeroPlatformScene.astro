@@ -66,35 +66,35 @@
   var grounds, plats, pipeD, clouds, bushes, sparkDefs, flagD, trophyD, tkDefs, route;
   if(mob){
     // Mobile: W=600, ground→?→green→brick flow, big jump to ? from ground
-    grounds=[{x:-32,w:160},{x:328,w:85},{x:490,w:110}];
+    grounds=[{x:-32,w:160},{x:307,w:85},{x:490,w:110}];
     plats=[
-      {x:170,y:95,w:32,t:'q'},    // ? block (first jump target)
-      {x:250,y:75,w:96,t:'g'},    // green platform (highest)
-      {x:420,y:110,w:64,t:'b'}    // brick before end
+      {x:167,y:95,w:32,t:'q'},    // ? block (first jump target)
+      {x:245,y:75,w:96,t:'g'},    // green platform (highest)
+      {x:442,y:110,w:32,t:'b'}    // single brick before end
     ];
     pipeD={x:40,y:123,w:38,h:32};
     clouds=[{x:30,y:20,s:50},{x:260,y:5,s:65},{x:510,y:18,s:45}];
-    bushes=[{x:8,y:GY,w:40,h:14},{x:348,y:GY,w:36,h:12},{x:530,y:GY,w:44,h:14}];
+    bushes=[{x:8,y:GY,w:40,h:14},{x:327,y:GY,w:36,h:12},{x:530,y:GY,w:44,h:14}];
     sparkDefs=[{x:120,y:44},{x:250,y:25},{x:380,y:50},{x:500,y:38}];
     flagD={x:545,bY:GY,h:50};
     trophyD={x:560,y:GY-38,w:38,h:38};
     tkDefs=[
       {x:50,y:133},{x:80,y:133},
-      {x:148,y:80},{x:185,y:70},
-      {x:275,y:50},{x:305,y:50},
-      {x:370,y:133},{x:428,y:85},
+      {x:145,y:80},{x:182,y:70},
+      {x:270,y:50},{x:300,y:50},
+      {x:368,y:133},{x:457,y:85},
       {x:525,y:133},{x:550,y:133}
     ];
     route=[
       {t:'w',x1:20,x2:110,gy:GY,d:0.6},
-      {t:'j',x1:110,x2:185,y1:GY,y2:95,pk:-30,d:0.5},
-      {t:'j',x1:185,x2:275,y1:95,y2:75,pk:-15,d:0.55},
-      {t:'w',x1:275,x2:330,gy:75,d:0.4},
-      {t:'j',x1:330,x2:365,y1:75,y2:GY,pk:-5,d:0.4},
-      {t:'w',x1:365,x2:405,gy:GY,d:0.3},
-      {t:'j',x1:405,x2:445,y1:GY,y2:110,pk:-28,d:0.4},
-      {t:'w',x1:445,x2:480,gy:110,d:0.3},
-      {t:'j',x1:480,x2:515,y1:110,y2:GY,pk:-8,d:0.35},
+      {t:'j',x1:110,x2:182,y1:GY,y2:95,pk:-30,d:0.5},
+      {t:'j',x1:182,x2:270,y1:95,y2:75,pk:-15,d:0.55},
+      {t:'w',x1:270,x2:336,gy:75,d:0.45},
+      {t:'j',x1:336,x2:355,y1:75,y2:GY,pk:-18,d:0.3},
+      {t:'w',x1:355,x2:400,gy:GY,d:0.3},
+      {t:'j',x1:400,x2:452,y1:GY,y2:110,pk:-28,d:0.4},
+      {t:'w',x1:452,x2:465,gy:110,d:0.15},
+      {t:'j',x1:465,x2:515,y1:110,y2:GY,pk:-8,d:0.35},
       {t:'w',x1:515,x2:565,gy:GY,d:0.4}
     ];
   } else {
