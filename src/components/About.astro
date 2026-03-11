@@ -75,11 +75,21 @@ const stats = [
     </div>
 
     <!-- Walking character platform - full width below content -->
-    <div class="hidden md:block mt-2">
+    <div class="block mt-2 about-walk-wrap">
       <canvas id="aboutWalkCanvas" style="width:100%;height:auto;image-rendering:pixelated;image-rendering:crisp-edges;display:block;"></canvas>
     </div>
   </div>
 </section>
+
+<style>
+  @media (max-width: 767px) {
+    .about-walk-wrap {
+      transform: scale(1.4);
+      transform-origin: center center;
+      margin-bottom: 1rem;
+    }
+  }
+</style>
 
 <script is:inline>
 (function(){
