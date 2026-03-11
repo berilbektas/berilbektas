@@ -3,7 +3,7 @@ import { socialLinks } from '../data/social';
 import HeroPlatformScene from './HeroPlatformScene.astro';
 ---
 
-<section id="hero" class="hero-section relative min-h-screen flex flex-col items-center justify-center overflow-hidden px-6 bg-bg-secondary">
+<section id="hero" class="relative min-h-screen flex flex-col items-center justify-center overflow-hidden px-6 bg-bg-secondary">
   <!-- Background gradient blobs -->
   <div class="absolute inset-0 overflow-hidden" aria-hidden="true">
     <div
@@ -24,7 +24,7 @@ import HeroPlatformScene from './HeroPlatformScene.astro';
   </div>
 
   <!-- Content -->
-  <div class="relative z-10 text-center max-w-4xl mx-auto flex-1 flex flex-col items-center justify-center pt-12">
+  <div class="hero-content relative z-10 text-center max-w-4xl mx-auto flex-1 flex flex-col items-center justify-center pt-12">
       <h1
         class="hero-name font-bold tracking-tight leading-[1.05] mb-3 hero-animate hero-delay-05 relative"
         style="font-family:'Caveat',cursive;"
@@ -110,11 +110,11 @@ import HeroPlatformScene from './HeroPlatformScene.astro';
       linear-gradient(90deg, rgba(196, 136, 153, 0.3) 1px, transparent 1px);
     background-size: 48px 48px;
   }
+  /* Mobile: move hero content up so it doesn't start from middle */
   @media (max-width: 767px) {
-    .hero-section {
-      min-height: auto !important;
-      justify-content: flex-start !important;
-      padding-top: 6rem;
+    .hero-content {
+      flex: none !important;
+      padding-top: 3.5rem !important;
     }
   }
   .hero-name {
