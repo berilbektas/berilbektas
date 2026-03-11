@@ -3,7 +3,7 @@ import { socialLinks } from '../data/social';
 import HeroPlatformScene from './HeroPlatformScene.astro';
 ---
 
-<section id="hero" class="relative min-h-screen md:min-h-screen flex flex-col items-center justify-start md:justify-center overflow-hidden px-6 bg-bg-secondary pt-24 md:pt-0">
+<section id="hero" class="hero-section relative flex flex-col items-center justify-start md:justify-center overflow-hidden px-6 bg-bg-secondary pt-24 md:pt-0">
   <!-- Background gradient blobs -->
   <div class="absolute inset-0 overflow-hidden" aria-hidden="true">
     <div
@@ -110,6 +110,14 @@ import HeroPlatformScene from './HeroPlatformScene.astro';
       linear-gradient(90deg, rgba(196, 136, 153, 0.3) 1px, transparent 1px);
     background-size: 48px 48px;
   }
+  .hero-section {
+    min-height: 100vh;
+  }
+  @media (max-width: 767px) {
+    .hero-section {
+      min-height: auto;
+    }
+  }
   .hero-name {
     font-size: clamp(2.8rem, 7vw + 1rem, 7rem);
   }
@@ -143,7 +151,7 @@ import HeroPlatformScene from './HeroPlatformScene.astro';
   /* Mobile: hide sparkles to prevent text overflow clipping */
   @media (max-width: 767px) {
     .sparkle { display: none; }
-    .hero-name { font-size: clamp(3.0rem, 13vw, 4.2rem) !important; }
+    .hero-name { font-size: clamp(3.0rem, 13vw, 4.2rem) !important; width: 100%; }
     .heart-dot {
       top: calc(0.82em + 10px) !important;
       left: calc(70% + 5px) !important;
