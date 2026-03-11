@@ -135,7 +135,7 @@ const stats = [
 
   // ETH token positions - fewer on mobile (remove 2 from each side)
   var ethSize=8;
-  var ethDefs = mob ? [30,65,100,135,170] : [50,90,130,170,210,250,290,330,370];
+  var ethDefs = mob ? [10,30,65,100,135,170,190] : [50,90,130,170,210,250,290,330,370];
   var tokens=[];
   function resetTokens(){
     tokens=ethDefs.map(function(x){return{x:x,y:H/2-4,got:false,at:0};});
