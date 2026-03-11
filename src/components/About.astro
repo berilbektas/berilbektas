@@ -81,22 +81,14 @@ const stats = [
   </div>
 </section>
 
-<style>
-  @media (max-width: 767px) {
-    .about-walk-wrap {
-      transform: scale(1.4);
-      transform-origin: center center;
-      margin-bottom: 1rem;
-    }
-  }
-</style>
-
 <script is:inline>
 (function(){
   var c = document.getElementById('aboutWalkCanvas');
   if(!c) return;
 
-  var W=400, H=40;
+  var mob = window.innerWidth < 768;
+  var W = mob ? 286 : 400;
+  var H = mob ? 32 : 40;
   var ctx;
 
   function setup(){
@@ -141,9 +133,9 @@ const stats = [
   imgEth.src='/assets/eth-pixel.png';
   imgEth.onload=function(){ ethLoaded=true; };
 
-  // ETH token positions (floating in space)
+  // ETH token positions - fewer on mobile (remove 2 from each side)
   var ethSize=8;
-  var ethDefs=[50,90,130,170,210,250,290,330,370];
+  var ethDefs = mob ? [45,95,143,191,241] : [50,90,130,170,210,250,290,330,370];
   var tokens=[];
   function resetTokens(){
     tokens=ethDefs.map(function(x){return{x:x,y:H/2-4,got:false,at:0};});
@@ -154,7 +146,7 @@ const stats = [
   var particles=[];
 
   // State
-  var cx=20, speed=40, dir=1, fr=0;
+  var cx=20, speed = mob ? 30 : 40, dir=1, fr=0;
   var charY=H/2+6;
   var lastT=0, collected=0;
 
@@ -216,8 +208,8 @@ const stats = [
     fr+=dt*6;
 
     // Bounce at edges
-    if(cx>W-20){ dir=-1; cx=W-20; }
-    if(cx<20){ dir=1; cx=20; }
+    if(cx>W-15){ dir=-1; cx=W-15; }
+    if(cx<15){ dir=1; cx=15; }
 
     // Check token collection
     for(var i=0;i<tokens.length;i++){
@@ -241,7 +233,7 @@ const stats = [
     }
 
     // Reset tokens when all collected and character reaches edge
-    if(collected>=tokens.length && (cx<=22||cx>=W-22)){
+    if(collected>=tokens.length && (cx<=17||cx>=W-17)){
       collected=0; resetTokens();
     }
 
