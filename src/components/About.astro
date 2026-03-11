@@ -87,8 +87,8 @@ const stats = [
   if(!c) return;
 
   var mob = window.innerWidth < 768;
-  var W = mob ? 286 : 400;
-  var H = mob ? 32 : 40;
+  var W = mob ? 200 : 400;
+  var H = mob ? 24 : 40;
   var ctx;
 
   function setup(){
@@ -135,7 +135,7 @@ const stats = [
 
   // ETH token positions - fewer on mobile (remove 2 from each side)
   var ethSize=8;
-  var ethDefs = mob ? [45,95,143,191,241] : [50,90,130,170,210,250,290,330,370];
+  var ethDefs = mob ? [30,65,100,135,170] : [50,90,130,170,210,250,290,330,370];
   var tokens=[];
   function resetTokens(){
     tokens=ethDefs.map(function(x){return{x:x,y:H/2-4,got:false,at:0};});
